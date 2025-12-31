@@ -4,17 +4,15 @@ import { prisma } from "@/lib/prisma";
 import DeleteButton from "@/components/DeleteButton";
 
 export default async function Products() {
-  
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const adminCookie = cookieStore.get("admin");
 
   if (!adminCookie || adminCookie.value !== "true") {
     redirect("/login");
   }
 
-  
   const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: { id: "desc" },
   });
 
   return (
@@ -40,7 +38,6 @@ export default async function Products() {
                 marginBottom: "0.75rem",
               }}
             >
-              {/* IMAGE */}
               {p.imageUrl ? (
                 <img
                   src={p.imageUrl}
@@ -68,13 +65,11 @@ export default async function Products() {
                 </div>
               )}
 
-              {/* INFO */}
               <div style={{ flex: 1 }}>
                 <p style={{ margin: 0, fontWeight: "bold" }}>{p.name}</p>
                 <p style={{ margin: 0 }}>₹{p.price}</p>
               </div>
 
-              {/* ACTIONS */}
               <div style={{ display: "flex", gap: "0.5rem" }}>
                 <a href={`/dashboard/products/${p.id}/edit`}>Edit</a>
                 <DeleteButton id={p.id} />
