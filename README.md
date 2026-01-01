@@ -76,6 +76,28 @@ Environment variables (.env) are purposefully left out of the repository.
 For image uploads to function, Cloudinary credentials must be added locally.
 - The project's goals are demonstration and education.
 
+
+## Live Deployment (Vercel)
+
+Live Application URL:
+
+https://ecommerce-admin-dashboard-wine.vercel.app/
+
+This is the primary production deployment hosted on Vercel.
+All core features including authentication, product management,
+image uploads, and data visualisation are fully functional.
+
+## Deployment Notes
+
+The application is deployed using Vercel and is connected to a
+PostgreSQL database hosted on Neon, with Prisma as the ORM layer.
+
+Key deployment considerations:
+- Server Components are used for data fetching and authentication.
+- Client Components are used for chart rendering to avoid SSR conflicts.
+- Environment variables are configured securely on Vercel.
+- Cloudinary is used for image uploads via server-side API routes.
+
 ## Writer
 
 Rounak Tiwari
