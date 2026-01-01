@@ -76,6 +76,14 @@ Environment variables (.env) are purposefully left out of the repository.
 For image uploads to function, Cloudinary credentials must be added locally.
 - The project's goals are demonstration and education.
 
+Note on Logout Behaviour
+
+When running the application locally (`http://localhost:3000`), the logout
+functionality works normally without any browser warnings.
+On the live Vercel deployment, some browsers (such as Chrome or Safari) may show 
+a confirmation or cache-related message during logout due to browser-level handling 
+of POST requests and server-side redirects in production. This is expected behaviour 
+and does not affect the security or correctness of the application.
 
 ## Live Deployment (Vercel)
 
