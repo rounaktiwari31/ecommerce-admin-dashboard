@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+
 
 const ProductChart = dynamic(
   () => import("@/components/ProductChart"),
@@ -10,8 +12,7 @@ const ProductChart = dynamic(
 
 export default async function Dashboard() {
   
-  const cookieStore = await cookies();
-  const admin = cookieStore.get("admin");
+  const admin = cookies().get("admin");
 
   if (!admin || admin.value !== "true") {
     redirect("/login");
@@ -39,14 +40,22 @@ export default async function Dashboard() {
       <h1>Admin Dashboard</h1>
 
       <div style={{ marginBottom: "1rem" }}>
-        <p><strong>Total Products:</strong> {totalProducts}</p>
-        <p><strong>Average Price:</strong> ₹{averagePrice}</p>
-        <p><strong>Highest Price:</strong> ₹{highestPrice}</p>
+        <p>
+          <strong>Total Products:</strong> {totalProducts}
+        </p>
+        <p>
+          <strong>Average Price:</strong> ₹{averagePrice}
+        </p>
+        <p>
+          <strong>Highest Price:</strong> ₹{highestPrice}
+        </p>
       </div>
 
+      {/*disable prefetch */}
       <div style={{ marginBottom: "1.5rem" }}>
-        <a
+        <Link
           href="/dashboard/products"
+          prefetch={false}
           style={{
             display: "inline-block",
             padding: "0.5rem 1rem",
@@ -56,7 +65,7 @@ export default async function Dashboard() {
           }}
         >
           Manage Products →
-        </a>
+        </Link>
       </div>
 
       <div
