@@ -2,10 +2,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import ProductChartClient from "@/components/ProductChartClient";
 
 export default async function Dashboard() {
-  const admin = cookies().get("admin");
+  const cookieStore = await cookies(); 
+  const admin = cookieStore.get("admin");
 
   if (!admin || admin.value !== "true") {
     redirect("/login");
@@ -51,16 +51,6 @@ export default async function Dashboard() {
         >
           Manage Products →
         </Link>
-      </div>
-
-      <div
-        style={{
-          padding: "1rem",
-          border: "1px solid #333",
-          borderRadius: "8px",
-        }}
-      >
-        <ProductChartClient products={products} />
       </div>
     </div>
   );
