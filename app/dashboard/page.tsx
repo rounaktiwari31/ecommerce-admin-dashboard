@@ -1,23 +1,34 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
+const ProductChart = dynamic(
+  () => import("@/components/ProductChart"),
+  { ssr: false }
+);
+
 export default async function Dashboard() {
-  const cookieStore = await cookies(); 
+  const cookieStore = await cookies();
   const admin = cookieStore.get("admin");
 
   if (!admin || admin.value !== "true") {
     redirect("/login");
   }
 
-  const rawProducts = await prisma.product.findMany();
+  let products: { name: string; price: number }[] = [];
 
-    const products = rawProducts.map((p) => ({
-    id: p.id,
-    name: p.name,
-    price: Number(p.price), 
-  }));
+  try {
+    const rawProducts = await prisma.product.findMany();
+
+    products = rawProducts.map((p) => ({
+      name: p.name,
+      price: Number(p.price ?? 0),
+    }));
+  } catch (err) {
+    console.error("DASHBOARD FETCH ERROR:", err);
+  }
 
   const totalProducts = products.length;
 
@@ -25,7 +36,8 @@ export default async function Dashboard() {
     totalProducts === 0
       ? "0.00"
       : (
-          products.reduce((sum, p) => sum + p.price, 0) / totalProducts
+          products.reduce((sum, p) => sum + p.price, 0) /
+          totalProducts
         ).toFixed(2);
 
   const highestPrice =
@@ -57,6 +69,16 @@ export default async function Dashboard() {
         >
           Manage Products →
         </Link>
+      </div>
+
+      <div
+        style={{
+          padding: "1rem",
+          border: "1px solid #333",
+          borderRadius: "8px",
+        }}
+      >
+        <ProductChart products={products} />
       </div>
     </div>
   );
